@@ -33,10 +33,20 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# CORS — allow the frontend origin
+# CORS — allow the frontend origins (localhost + Vercel deployments)
+_allowed_origins = [
+    settings.frontend_url,
+    "http://localhost:3000",
+]
+# Allow all Vercel preview/production URLs for this project
+_allowed_origin_patterns = [
+    r"https://evidence-mvp.*\.vercel\.app",
+    r"https://.*-karunasagar12s-projects\.vercel\.app",
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_url, "http://localhost:3000"],
+    allow_origins=_allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
